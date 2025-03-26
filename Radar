@@ -1,0 +1,300 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+local chamsColor = Color3.fromRGB(255, 20, 147) -- Pink color for Chams
+local healthColor = Color3.fromRGB(0, 255, 0)  -- Green health color
+local lowHealthColor = Color3.fromRGB(255, 0, 0)  -- Red color for low health
+local distanceColor = Color3.fromRGB(255, 255, 255)  -- White color for distance label
+
+-- Function to check if character is valid
+local function isValidCharacter(character)
+    return character and character:FindFirstChild("HumanoidRootPart")
+end
+
+-- Chams ESP (Outline/Highlight)
+local function createChamsESP(character)
+    if isValidCharacter(character) then
+        if not character:FindFirstChild("ChamsESP") then
+            local chamsFolder = Instance.new("Folder")
+            chamsFolder.Name = "ChamsESP"
+            chamsFolder.Parent = character
+
+            for _, part in pairs(character:GetChildren()) do
+                if part:IsA("MeshPart") or part:IsA("Part") then
+                    local meshPart = part:Clone()
+                    meshPart.Color = chamsColor
+                    meshPart.Parent = chamsFolder
+                    meshPart.Transparency = 0.5 -- Make it slightly transparent to mimic Chams
+                end
+            end
+        end
+    end
+end
+
+-- Health ESP
+local function createHealthESP(character)
+    if isValidCharacter(character) and character:FindFirstChild("Humanoid") then
+        if not character:FindFirstChild("HealthESP") then
+            local healthESP = Instance.new("BillboardGui")
+            healthESP.Parent = character
+            healthESP.Adornee = character.Head
+            healthESP.Size = UDim2.new(3, 0, 1, 0)
+            healthESP.StudsOffset = Vector3.new(0, 2, 0)
+            healthESP.AlwaysOnTop = true
+
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Parent = healthESP
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.TextScaled = true
+            textLabel.TextColor3 = healthColor
+            textLabel.Font = Enum.Font.GothamBold
+
+            local humanoid = character:FindFirstChild("Humanoid")
+            humanoid:GetPropertyChangedSignal("Health"):Connect(function()
+                if humanoid.Health then
+                    textLabel.Text = "Health: " .. math.ceil(humanoid.Health)
+                    if humanoid.Health < humanoid.MaxHealth * 0.25 then
+                        textLabel.TextColor3 = lowHealthColor
+                    else
+                        textLabel.TextColor3 = healthColor
+                    end
+                end
+            end)
+
+            textLabel.Text = "Health: " .. math.ceil(humanoid.Health)
+        end
+    end
+end
+
+-- Distance ESP
+local function createDistanceESP(character)
+    if isValidCharacter(character) then
+        if not character:FindFirstChild("DistanceESP") then
+            local distanceESP = Instance.new("BillboardGui")
+            distanceESP.Parent = character
+            distanceESP.Adornee = character.HumanoidRootPart
+            distanceESP.Size = UDim2.new(3, 0, 1, 0)
+            distanceESP.StudsOffset = Vector3.new(0, 2, 0)
+            distanceESP.AlwaysOnTop = true
+
+            local textLabel = Instance.new("TextLabel")
+            textLabel.Parent = distanceESP
+            textLabel.Size = UDim2.new(1, 0, 1, 0)
+            textLabel.BackgroundTransparency = 1
+            textLabel.TextScaled = true
+            textLabel.TextColor3 = distanceColor
+            textLabel.Font = Enum.Font.GothamBold
+
+            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+            if humanoidRootPart then
+                RunService.Heartbeat:Connect(function()
+                    if humanoidRootPart and player.Character then
+                        local distance = (humanoidRootPart.Position - player.Character.HumanoidRootPart.Position).Magnitude
+                        textLabel.Text = string.format("Distance: %.1f", distance)
+                    end
+                end)
+            end
+        end
+    end
+end
+
+-- 2D Radar ESP
+local radarSize = UDim2.new(0, 200, 0, 200)
+local radarColor = Color3.fromRGB(0, 255, 0)  -- Green radar
+
+local radarGui = Instance.new("ScreenGui")
+radarGui.Parent = game.CoreGui
+radarGui.Name = "RadarESP"
+
+local radarFrame = Instance.new("Frame")
+radarFrame.Parent = radarGui
+radarFrame.Size = radarSize
+radarFrame.Position = UDim2.new(0, 10, 0, 10)
+radarFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+radarFrame.BackgroundTransparency = 0.5
+
+local radarCircle = Instance.new("Frame")
+radarCircle.Parent = radarFrame
+radarCircle.Size = UDim2.new(1, 0, 1, 0)
+radarCircle.Position = UDim2.new(0.5, -100, 0.5, -100)
+radarCircle.BackgroundColor3 = radarColor
+radarCircle.BackgroundTransparency = 0.5
+
+-- Apply rounded corners to the radar circle using UICorner
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0.5, 0)  -- This will round the corners
+corner.Parent = radarCircle  -- Apply it to the radar circle frame
+
+-- Table to store references to player radar elements
+-- Table to store references to player radar elements
+local radarSymbols = {}
+
+-- Function to update the radar for each player
+local function updateRadarESP()
+    -- Iterate through each player in the game
+    for _, otherPlayer in pairs(Players:GetPlayers()) do
+        -- Skip the local player if it's the local player's own radar symbol
+        if otherPlayer ~= player then  
+            local character = otherPlayer.Character
+            if isValidCharacter(character) then
+                -- Get the position of the character's HumanoidRootPart
+                local playerPosition = character.HumanoidRootPart.Position
+
+                -- Calculate the normalized position for the radar
+                local radarPosX = (playerPosition.X / 100) % 1  -- Normalize position
+                local radarPosZ = (playerPosition.Z / 100) % 1  -- Normalize position
+
+                -- Fetch the player's headshot image
+                local headshotImageId = "rbxthumb://type=AvatarHeadShot&id=" .. otherPlayer.UserId .. "&w=150&h=150"
+                
+                -- Check if we already have the player's symbol on the radar
+                if radarSymbols[otherPlayer.UserId] then
+                    -- Remove the previous radar symbol and name
+                    radarSymbols[otherPlayer.UserId].headshot:Destroy()
+                    radarSymbols[otherPlayer.UserId].nameLabel:Destroy()
+                    radarSymbols[otherPlayer.UserId].healthPercentageLabel:Destroy()  -- Remove the old health label
+                end
+
+                -- Create an ImageLabel for the player's headshot
+                local playerHeadshot = Instance.new("ImageLabel")
+                playerHeadshot.Parent = radarFrame
+                playerHeadshot.Size = UDim2.new(0, 20, 0, 20)  -- Size of the headshot
+                playerHeadshot.Position = UDim2.new(radarPosX, 0, radarPosZ, 0)
+                playerHeadshot.BackgroundTransparency = 1  -- Make the background transparent
+                playerHeadshot.Image = headshotImageId  -- Set the image to the player's avatar
+                playerHeadshot.ImageRectSize = Vector2.new(150, 150)  -- Set the image size
+                playerHeadshot.ImageRectOffset = Vector2.new(0, 0)  -- Set the image offset
+
+                -- Add a player name label above the headshot
+                local playerNameLabel = Instance.new("TextLabel")
+                playerNameLabel.Parent = radarFrame
+                playerNameLabel.Size = UDim2.new(0, 50, 0, 20)  -- Size of the label
+                playerNameLabel.Position = UDim2.new(radarPosX, 0, radarPosZ - 0.1, 0)  -- Adjust label position
+                playerNameLabel.Text = otherPlayer.Name
+                playerNameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White text color
+                playerNameLabel.BackgroundTransparency = 1  -- Transparent background
+                playerNameLabel.TextScaled = true
+                playerNameLabel.Font = Enum.Font.GothamBold
+
+                -- Create a health percentage label below the headshot
+                local healthPercentageLabel = Instance.new("TextLabel")
+                healthPercentageLabel.Parent = radarFrame
+                healthPercentageLabel.Size = UDim2.new(0, 50, 0, 20)  -- Size of the label
+                healthPercentageLabel.Position = UDim2.new(radarPosX, 0, radarPosZ + 0.1, 0)  -- Adjust label position
+                healthPercentageLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White text color
+                healthPercentageLabel.BackgroundTransparency = 1  -- Transparent background
+                healthPercentageLabel.TextScaled = true
+                healthPercentageLabel.Font = Enum.Font.GothamBold
+
+                -- Update health percentage in the radar
+                local humanoid = character:FindFirstChild("Humanoid")
+                if humanoid then
+                    local healthPercentage = (humanoid.Health / humanoid.MaxHealth) * 100
+                    healthPercentageLabel.Text = string.format("HP: %d%%", math.ceil(healthPercentage))
+
+                    -- Optionally, change the color of the health percentage based on health
+                    if healthPercentage < 25 then
+                        healthPercentageLabel.TextColor3 = Color3.fromRGB(255, 0, 0)  -- Red for low health
+                    else
+                        healthPercentageLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White for normal health
+                    end
+
+                    -- Update health percentage when health changes
+                    humanoid:GetPropertyChangedSignal("Health"):Connect(function()
+                        local updatedHealthPercentage = (humanoid.Health / humanoid.MaxHealth) * 100
+                        healthPercentageLabel.Text = string.format("HP: %d%%", math.ceil(updatedHealthPercentage))
+                    end)
+                end
+
+                -- Store the created elements in the radarSymbols table
+                radarSymbols[otherPlayer.UserId] = {
+                    headshot = playerHeadshot,
+                    nameLabel = playerNameLabel,
+                    healthPercentageLabel = healthPercentageLabel
+                }
+
+                -- Make the headshot, name, and health disappear after 2 seconds
+                delay(2, function()
+                    if radarSymbols[otherPlayer.UserId] then
+                        radarSymbols[otherPlayer.UserId].headshot:Destroy()
+                        radarSymbols[otherPlayer.UserId].nameLabel:Destroy()
+                        radarSymbols[otherPlayer.UserId].healthPercentageLabel:Destroy()
+                        radarSymbols[otherPlayer.UserId] = nil  -- Remove the reference from the table
+                    end
+                end)
+            end
+        end
+    end
+
+    -- Handle the local player's radar symbol (optional)
+    local localCharacter = player.Character
+    if localCharacter and isValidCharacter(localCharacter) then
+        local playerPosition = localCharacter.HumanoidRootPart.Position
+        local radarPosX = (playerPosition.X / 100) % 1
+        local radarPosZ = (playerPosition.Z / 100) % 1
+        local headshotImageId = "rbxthumb://type=AvatarHeadShot&id=" .. player.UserId .. "&w=150&h=150"
+
+        -- Check if we already have the local player's symbol on the radar
+        if radarSymbols[player.UserId] then
+            -- Remove the previous radar symbol and name
+            radarSymbols[player.UserId].headshot:Destroy()
+            radarSymbols[player.UserId].nameLabel:Destroy()
+            radarSymbols[player.UserId].healthPercentageLabel:Destroy()  -- Remove the old health label
+        end
+
+        -- Create an ImageLabel for the local player's headshot
+        local playerHeadshot = Instance.new("ImageLabel")
+        playerHeadshot.Parent = radarFrame
+        playerHeadshot.Size = UDim2.new(0, 20, 0, 20)  -- Size of the headshot
+        playerHeadshot.Position = UDim2.new(radarPosX, 0, radarPosZ, 0)
+        playerHeadshot.BackgroundTransparency = 1  -- Make the background transparent
+        playerHeadshot.Image = headshotImageId  -- Set the image to the player's avatar
+        playerHeadshot.ImageRectSize = Vector2.new(150, 150)  -- Set the image size
+        playerHeadshot.ImageRectOffset = Vector2.new(0, 0)  -- Set the image offset
+
+        -- Add the local player's name label above the headshot
+        local playerNameLabel = Instance.new("TextLabel")
+        playerNameLabel.Parent = radarFrame
+        playerNameLabel.Size = UDim2.new(0, 50, 0, 20)  -- Size of the label
+        playerNameLabel.Position = UDim2.new(radarPosX, 0, radarPosZ - 0.1, 0)  -- Adjust label position
+        playerNameLabel.Text = player.Name
+        playerNameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White text color
+        playerNameLabel.BackgroundTransparency = 1  -- Transparent background
+        playerNameLabel.TextScaled = true
+        playerNameLabel.Font = Enum.Font.GothamBold
+
+        -- Create a health percentage label below the headshot
+        local healthPercentageLabel = Instance.new("TextLabel")
+        healthPercentageLabel.Parent = radarFrame
+        healthPercentageLabel.Size = UDim2.new(0, 50, 0, 20)  -- Size of the label
+        healthPercentageLabel.Position = UDim2.new(radarPosX, 0, radarPosZ + 0.1, 0)  -- Adjust label position
+        healthPercentageLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  -- White text color
+        healthPercentageLabel.BackgroundTransparency = 1  -- Transparent background
+        healthPercentageLabel.TextScaled = true
+        healthPercentageLabel.Font = Enum.Font.GothamBold
+
+        -- Update health percentage for the local player
+        local humanoid = localCharacter:FindFirstChild("Humanoid")
+        if humanoid then
+            local healthPercentage = (humanoid.Health / humanoid.MaxHealth) * 100
+            healthPercentageLabel.Text = string.format("HP: %d%%", math.ceil(healthPercentage))
+        end
+
+        -- Store the created elements in the radarSymbols table
+        radarSymbols[player.UserId] = {
+            headshot = playerHeadshot,
+            nameLabel = playerNameLabel,
+            healthPercentageLabel = healthPercentageLabel
+        }
+    end
+end
+
+-- Monitor players for ESP updates
+RunService.Heartbeat:Connect(function()
+    -- Ensure the character is valid before updating ESP
+    if player.Character then
+        updateRadarESP()
+    end
+end)
