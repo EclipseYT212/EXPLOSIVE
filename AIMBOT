@@ -13,9 +13,6 @@ local aimSmoothness = 0.2 -- Lower = faster aim, higher = slower aim
 local FOV = 60 -- Field of View (only targets enemies within this angle)
 local autoShoot = true -- Automatically shoots when locked onto target
 
--- Team check settings
-local targetTeamName = "Police" -- Set the team you want to target (e.g., "Police")
-
 -- Crosshair settings
 local crosshairSize = 25
 local crosshairColor = Color3.fromRGB(255, 0, 0)
@@ -34,7 +31,7 @@ local function createCrosshair()
     crosshair.BorderSizePixel = 0
 end
 
--- Function to find the nearest player (with team check)
+-- Function to find the nearest player (without team check)
 local function getNearestPlayer()
     local closestTarget = nil
     local shortestDistance = math.huge
@@ -42,10 +39,7 @@ local function getNearestPlayer()
     for _, otherPlayer in pairs(Players:GetPlayers()) do
         if otherPlayer ~= player and otherPlayer.Character then
             local character = otherPlayer.Character
-            local teamName = otherPlayer.Team and otherPlayer.Team.Name -- Get the team name of the player
-            
-            -- Only target players from the specified team (e.g., "Police")
-            if teamName == targetTeamName and character:FindFirstChild("HumanoidRootPart") then
+            if character:FindFirstChild("HumanoidRootPart") then
                 local targetPos = character.HumanoidRootPart.Position
                 local distance = (player.Character.HumanoidRootPart.Position - targetPos).Magnitude
                 if distance < shortestDistance then
@@ -109,7 +103,7 @@ createCrosshair()
 -- Run the aimbot logic
 RunService.RenderStepped:Connect(function()
     if aimbotActive then
-        local target = getNearestPlayer()  -- Get the nearest player from the target team
+        local target = getNearestPlayer()  -- Get the nearest player (without any team restrictions)
         
         if target and isTargetInFOV(target) then
             aimAt(target)
