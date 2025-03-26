@@ -1,0 +1,47 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+
+-- 🎨 Define colors (You can add more!)
+local colors = {
+    ["Red"] = Color3.fromRGB(255, 0, 0),
+    ["Blue"] = Color3.fromRGB(0, 0, 255),
+    ["Green"] = Color3.fromRGB(0, 255, 0),
+    ["Yellow"] = Color3.fromRGB(255, 255, 0),
+    ["Purple"] = Color3.fromRGB(128, 0, 128),
+    ["White"] = Color3.fromRGB(255, 255, 255),
+    ["Pink"] = Color3.fromRGB(255, 20, 147),
+}
+
+-- 🎯 Change the ESP color here (Pick from above)
+local selectedColor = colors["Pink"] -- Change to "Red", "Green", etc.
+
+-- Function to create ESP for a player
+local function createESP(character)
+    if character:FindFirstChild("HumanoidRootPart") then
+        -- Only create the highlight if HumanoidRootPart exists
+        local highlight = Instance.new("Highlight")
+        highlight.Parent = character
+        highlight.FillColor = selectedColor
+        highlight.OutlineColor = Color3.fromRGB(255, 255, 255) -- White outline
+        highlight.FillTransparency = 0.5
+        highlight.OutlineTransparency = 0
+    end
+end
+
+-- Function to check for players and add ESP
+local function updateESP()
+    for _, otherPlayer in pairs(Players:GetPlayers()) do
+        if otherPlayer ~= player then
+            local character = otherPlayer.Character
+            if character and not character:FindFirstChildOfClass("Highlight") then
+                -- Apply ESP to everyone
+                createESP(character)
+            end
+        end
+    end
+end
+
+-- Keep checking for new players and adding ESP
+RunService.Heartbeat:Connect(updateESP)
