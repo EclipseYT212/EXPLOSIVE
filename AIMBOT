@@ -32,19 +32,23 @@ local function createCrosshair()
 end
 
 -- Function to find the nearest player (without team check)
+-- Function to find the nearest player (with team check)
 local function getNearestPlayer()
     local closestTarget = nil
     local shortestDistance = math.huge
     
     for _, otherPlayer in pairs(Players:GetPlayers()) do
         if otherPlayer ~= player and otherPlayer.Character then
-            local character = otherPlayer.Character
-            if character:FindFirstChild("HumanoidRootPart") then
-                local targetPos = character.HumanoidRootPart.Position
-                local distance = (player.Character.HumanoidRootPart.Position - targetPos).Magnitude
-                if distance < shortestDistance then
-                    shortestDistance = distance
-                    closestTarget = character
+            -- Check if the other player is on the same team
+            if otherPlayer.Team ~= player.Team then
+                local character = otherPlayer.Character
+                if character:FindFirstChild("HumanoidRootPart") then
+                    local targetPos = character.HumanoidRootPart.Position
+                    local distance = (player.Character.HumanoidRootPart.Position - targetPos).Magnitude
+                    if distance < shortestDistance then
+                        shortestDistance = distance
+                        closestTarget = character
+                    end
                 end
             end
         end
