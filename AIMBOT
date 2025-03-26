@@ -1,0 +1,115 @@
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local Camera = game.Workspace.CurrentCamera
+local player = Players.LocalPlayer
+local mouse = player:GetMouse()
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+-- 🎯 Aimbot Settings
+local aimKey = Enum.KeyCode.E -- Key to toggle aimbot on/off
+local aimbotActive = false
+local aimSmoothness = 0.2 -- Lower = faster aim, higher = slower aim
+local FOV = 60 -- Field of View (only targets enemies within this angle)
+local autoShoot = true -- Automatically shoots when locked onto target
+
+-- Crosshair settings
+local crosshairSize = 25
+local crosshairColor = Color3.fromRGB(255, 0, 0)
+
+-- Function to create a crosshair GUI
+local function createCrosshair()
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Parent = game.CoreGui
+    
+    local crosshair = Instance.new("Frame")
+    crosshair.Parent = screenGui
+    crosshair.AnchorPoint = Vector2.new(0.5, 0.5)
+    crosshair.Size = UDim2.new(0, crosshairSize, 0, crosshairSize)
+    crosshair.Position = UDim2.new(0.5, 0, 0.5, 0)
+    crosshair.BackgroundColor3 = crosshairColor
+    crosshair.BorderSizePixel = 0
+end
+
+-- Function to find the nearest player (no team restrictions)
+local function getNearestPlayer()
+    local closestTarget = nil
+    local shortestDistance = math.huge
+    
+    for _, otherPlayer in pairs(Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Character then
+            local character = otherPlayer.Character
+            if character:FindFirstChild("HumanoidRootPart") then
+                local targetPos = character.HumanoidRootPart.Position
+                local distance = (player.Character.HumanoidRootPart.Position - targetPos).Magnitude
+                if distance < shortestDistance then
+                    shortestDistance = distance
+                    closestTarget = character
+                end
+            end
+        end
+    end
+    
+    return closestTarget
+end
+
+-- Function to calculate the FOV (Field of View)
+local function isTargetInFOV(target)
+    local targetPosition = target.HumanoidRootPart.Position
+    local cameraPosition = Camera.CFrame.Position
+    local directionToTarget = (targetPosition - cameraPosition).unit
+    local cameraDirection = Camera.CFrame.LookVector
+    local dotProduct = directionToTarget:Dot(cameraDirection)
+    local angle = math.acos(dotProduct) * (180 / math.pi)
+    
+    return angle <= FOV
+end
+
+-- Function to aim at the target smoothly
+local function aimAt(target)
+    if target and target:FindFirstChild("Head") then
+        local targetPosition = target.Head.Position
+        local cameraPosition = Camera.CFrame.Position
+        local direction = (targetPosition - cameraPosition).unit
+        Camera.CFrame = Camera.CFrame:Lerp(CFrame.new(cameraPosition, cameraPosition + direction), aimSmoothness)
+    end
+end
+
+-- Function to simulate shooting by pressing the LeftShift key (or another key) using VirtualInputManager
+local function simulateShoot()
+    -- Simulate the pressing of the LeftShift key using the Enum.KeyCode for LeftShift
+    VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.LeftShift, false, game) -- Press LeftShift key
+    wait(0.1) -- Small delay to simulate key press duration
+    VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.LeftShift, false, game) -- Release LeftShift key
+end
+
+-- Function to shoot automatically when locked onto a target (using VirtualInputManager)
+local function autoShoot()
+    simulateShoot()  -- Simulate the press and release of the LeftShift key (acting as the shoot trigger)
+end
+
+-- Keybind to toggle aimbot
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    
+    if input.KeyCode == aimKey then
+        aimbotActive = not aimbotActive
+    end
+end)
+
+-- Create crosshair
+createCrosshair()
+
+-- Run the aimbot logic
+RunService.RenderStepped:Connect(function()
+    if aimbotActive then
+        local target = getNearestPlayer()  -- Change here to target all players
+        
+        if target and isTargetInFOV(target) then
+            aimAt(target)
+            if autoShoot then
+                autoShoot()  -- Automatically shoot when locked onto the target
+            end
+        end
+    end
+end)
