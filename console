@@ -1,4 +1,3 @@
-
 local gui = Instance.new("ScreenGui")
 gui.Name = "CONSOLEMENU"
 gui.Parent = game.CoreGui
@@ -25,6 +24,21 @@ consoleTitle.TextSize = 18
 consoleTitle.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 consoleTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 consoleTitle.Parent = consoleFrame
+
+-- Close Button
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 30, 0, 30)
+closeButton.Position = UDim2.new(1, -35, 0, 5)
+closeButton.Text = "X"
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 18
+closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.Parent = consoleFrame
+
+closeButton.MouseButton1Click:Connect(function()
+    gui:Destroy() -- Removes the GUI from CoreGui
+end)
 
 -- Console Output (TextLabel for displaying messages)
 local consoleOutput = Instance.new("TextLabel")
