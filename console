@@ -78,9 +78,6 @@ consoleInput.FocusLost:Connect(function(enterPressed)
         if inputText:upper() == "aimbot" then
             consoleOutput.Text = consoleOutput.Text .. "Aimbot Loading"
 loadstring(game:HttpGet("https://raw.githubusercontent.com/EclipseYT212/EXPLOSIVE/refs/heads/main/AIMBOT"))()
-   if inputText:upper() == "help" then
-            consoleOutput.Text = consoleOutput.Text .. "\nListofCommands\nAimbot\nEsp\nclear"
-
         elseif inputText:lower() == "clear" then
             consoleOutput.Text = ""
         else
