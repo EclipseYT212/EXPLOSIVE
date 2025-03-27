@@ -8,7 +8,7 @@ PlayerListFrame.Position = UDim2.new(0.02, 0, 0.1, 0) -- Moved higher
 PlayerListFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
 PlayerListFrame.BorderSizePixel = 3
 PlayerListFrame.Visible = false
-PlayerListFrame.Parent = gui
+PlayerListFrame.Parent = game.CoreGui
 PlayerListFrame.Draggable = true
 
 local corner = Instance.new("UICorner")
