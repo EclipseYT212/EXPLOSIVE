@@ -75,9 +75,12 @@ consoleInput.FocusLost:Connect(function(enterPressed)
         consoleOutput.Text = consoleOutput.Text .. "\n> " .. inputText
 
         -- You can add custom commands here
-        if inputText:upper() == "aimbot" then
+        if inputText:lower() == "aimbot" then
             consoleOutput.Text = consoleOutput.Text .. "Aimbot Loading"
 loadstring(game:HttpGet("https://raw.githubusercontent.com/EclipseYT212/EXPLOSIVE/refs/heads/main/AIMBOT"))()
+   if inputText:lower() == "help" then
+            consoleOutput.Text = consoleOutput.Text .. "\nListofCommands\nAimbot\nEsp\nclear"
+
         elseif inputText:lower() == "clear" then
             consoleOutput.Text = ""
         else
