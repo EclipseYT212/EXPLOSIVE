@@ -1,7 +1,6 @@
 local gui = Instance.new("ScreenGui")
+gui.Name = "GTAStyleMenu"
 gui.Parent = game.CoreGui
-
-
 
 
 
