@@ -1,3 +1,6 @@
+local gui = Instance.new("ScreenGui")
+gui.Name = "GTAStyleMenu"
+gui.Parent = game.CoreGui
 
 -- Create Console Frame
 local consoleFrame = Instance.new("Frame")
