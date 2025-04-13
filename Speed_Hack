@@ -1,0 +1,17 @@
+local desiredSpeed = 50  -- Change to your desired speed
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Function to enforce speed
+local function enforceSpeed()
+	while true do
+		if humanoid and humanoid.WalkSpeed ~= desiredSpeed then
+			humanoid.WalkSpeed = desiredSpeed
+		end
+		wait(0.1) -- check every 0.1 seconds
+	end
+end
+
+-- Run in a coroutine to avoid blocking other scripts
+coroutine.wrap(enforceSpeed)()
