@@ -219,3 +219,76 @@ local function onInputBegan(input, gameProcessed)
 end
 
 UserInputService.InputBegan:Connect(onInputBegan)
+-- Message Popup UI
+local messagePopup = Instance.new("Frame")
+messagePopup.Size = UDim2.new(0, 250, 0, 140)
+messagePopup.Position = UDim2.new(0.5, -125, 0.5, -70)
+messagePopup.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+messagePopup.Visible = false
+messagePopup.Parent = gui
+messagePopup.ZIndex = 10
+
+local popupCorner = Instance.new("UICorner")
+popupCorner.CornerRadius = UDim.new(0, 8)
+popupCorner.Parent = messagePopup
+
+local popupTitle = Instance.new("TextLabel")
+popupTitle.Size = UDim2.new(1, 0, 0.2, 0)
+popupTitle.Text = "Send Message"
+popupTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+popupTitle.BackgroundTransparency = 1
+popupTitle.Font = Enum.Font.GothamBold
+popupTitle.TextSize = 18
+popupTitle.Parent = messagePopup
+
+local messageBox = Instance.new("TextBox")
+messageBox.Size = UDim2.new(0.9, 0, 0.4, 0)
+messageBox.Position = UDim2.new(0.05, 0, 0.3, 0)
+messageBox.PlaceholderText = "Enter your message..."
+messageBox.Text = ""
+messageBox.Font = Enum.Font.Gotham
+messageBox.TextSize = 14
+messageBox.TextWrapped = true
+messageBox.TextColor3 = Color3.new(1, 1, 1)
+messageBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+messageBox.ClearTextOnFocus = false
+messageBox.Parent = messagePopup
+
+local sendButton = Instance.new("TextButton")
+sendButton.Size = UDim2.new(0.45, 0, 0.2, 0)
+sendButton.Position = UDim2.new(0.05, 0, 0.75, 0)
+sendButton.Text = "Send"
+sendButton.Font = Enum.Font.GothamBold
+sendButton.TextSize = 14
+sendButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+sendButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+sendButton.Parent = messagePopup
+
+local cancelButton = Instance.new("TextButton")
+cancelButton.Size = UDim2.new(0.45, 0, 0.2, 0)
+cancelButton.Position = UDim2.new(0.5, 0, 0.75, 0)
+cancelButton.Text = "Cancel"
+cancelButton.Font = Enum.Font.GothamBold
+cancelButton.TextSize = 14
+cancelButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+cancelButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
+cancelButton.Parent = messagePopup
+-- Show the message popup
+messagePopup.Visible = true
+messageBox.Text = ""
+popupTitle.Text = "Message to: " .. player.Name
+
+-- Hook Send button
+sendButton.MouseButton1Click:Connect(function()
+    local msg = messageBox.Text
+    if msg and msg ~= "" then
+        print("Sending message to " .. player.Name .. ": " .. msg)
+        -- Insert actual message-sending logic here if desired
+        messagePopup.Visible = false
+    end
+end)
+
+-- Hook Cancel button
+cancelButton.MouseButton1Click:Connect(function()
+    messagePopup.Visible = false
+end)
