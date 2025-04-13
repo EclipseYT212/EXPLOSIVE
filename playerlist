@@ -284,15 +284,7 @@ messagePopup.Visible = true
 messageBox.Text = ""
 popupTitle.Text = "Message to: " .. player.Name
 
--- Hook Send button
-sendButton.MouseButton1Click:Connect(function()
-    local msg = messageBox.Text
-    if msg and msg ~= "" then
-        print("Sending message to " .. player.Name .. ": " .. msg)
-        -- Insert actual message-sending logic here if desired
-        messagePopup.Visible = false
-    end
-end)
+
 
 -- Hook Cancel button
 cancelButton.MouseButton1Click:Connect(function()
