@@ -78,6 +78,23 @@ local messageButton = createActionButton("Message", UDim2.new(0, 0, 0, 20), acti
 end)
 
 local viewProfileButton = createActionButton("View Profile", UDim2.new(0, 0, 0, 40), actionFrame, function()
+local StarterGui = game:GetService("StarterGui")
+
+local function openPlayerProfile(player)
+    local userId = player.UserId
+    local profileUrl = "https://www.roblox.com/users/" .. userId .. "/profile"
+
+    StarterGui:SetCore("OpenBrowserWindow", profileUrl)
+end
+
+-- Example: open the profile of the first player in the game
+local Players = game:GetService("Players")
+local targetPlayer = Players:GetPlayers()[1]  -- Replace with your target player
+
+if targetPlayer then
+    openPlayerProfile(targetPlayer)
+end
+
     print("Viewing profile")  -- Replace with profile view function
 end)
 
