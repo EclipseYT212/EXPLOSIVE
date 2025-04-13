@@ -1,0 +1,401 @@
+
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local player = game:GetService("Players").LocalPlayer
+
+-- UI Customization Variables
+local menuBackgroundColor = Color3.fromRGB(10, 10, 10)
+local menuGlowColor = Color3.fromRGB(0, 255, 0)
+local menuTransparency = 0
+
+-- Create Main GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "GTAStyleMenu"
+gui.Parent = game.CoreGui
+
+-- Main Menu Frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 300, 0, 250)
+frame.Position = UDim2.new(0.02, 0, 0.3, 0)
+frame.BackgroundColor3 = menuBackgroundColor
+frame.BackgroundTransparency = menuTransparency
+frame.BorderSizePixel = 3
+frame.Visible = false
+frame.Parent = gui
+frame.Draggable = true 
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = frame
+
+local glow = Instance.new("UIStroke")
+glow.Thickness = 2
+glow.Color = menuGlowColor
+glow.Parent = frame
+
+-- Title
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0.2, 0)
+title.Text = "EXPLOSIVE UNIVERSAL"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 20
+title.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Parent = frame
+
+-- Settings Menu
+local settingsFrame = Instance.new("Frame")
+settingsFrame.Size = UDim2.new(0, 250, 0, 300)
+settingsFrame.Position = UDim2.new(0.35, 0, 0.3, 0)
+settingsFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+settingsFrame.BorderSizePixel = 2
+settingsFrame.Visible = false
+settingsFrame.Parent = gui
+settingsFrame.Draggable = true
+
+local settingsCorner = Instance.new("UICorner")
+settingsCorner.CornerRadius = UDim.new(0, 8)
+settingsCorner.Parent = settingsFrame
+
+local settingsTitle = Instance.new("TextLabel")
+settingsTitle.Size = UDim2.new(1, 0, 0.2, 0)
+settingsTitle.Text = "UI Settings"
+settingsTitle.Font = Enum.Font.GothamBold
+settingsTitle.TextSize = 18
+settingsTitle.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+settingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+settingsTitle.Parent = settingsFrame
+
+-- Settings Controls
+local colorPickerButton = Instance.new("TextButton")
+colorPickerButton.Size = UDim2.new(1, 0, 0.2, 0)
+colorPickerButton.Position = UDim2.new(0, 0, 0.2, 0)
+colorPickerButton.Text = "Change UI Color"
+colorPickerButton.Font = Enum.Font.Gotham
+colorPickerButton.TextSize = 14
+colorPickerButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+colorPickerButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+colorPickerButton.Parent = settingsFrame
+
+local fontSizeSlider = Instance.new("TextButton")
+fontSizeSlider.Size = UDim2.new(1, 0, 0.2, 0)
+fontSizeSlider.Position = UDim2.new(0, 0, 0.4, 0)
+fontSizeSlider.Text = "Increase Font Size"
+fontSizeSlider.Font = Enum.Font.Gotham
+fontSizeSlider.TextSize = 14
+fontSizeSlider.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+fontSizeSlider.TextColor3 = Color3.fromRGB(255, 255, 255)
+fontSizeSlider.Parent = settingsFrame
+
+local transparencySlider = Instance.new("TextButton")
+transparencySlider.Size = UDim2.new(1, 0, 0.2, 0)
+transparencySlider.Position = UDim2.new(0, 0, 0.6, 0)
+transparencySlider.Text = "Change Transparency"
+transparencySlider.Font = Enum.Font.Gotham
+transparencySlider.TextSize = 14
+transparencySlider.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+transparencySlider.TextColor3 = Color3.fromRGB(255, 255, 255)
+transparencySlider.Parent = settingsFrame
+
+-- Close Settings Button
+local ChangeColor = Instance.new("TextButton")
+ChangeColor.Size = UDim2.new(1, 0, 0.2, 0)
+ChangeColor.Position = UDim2.new(0, 0, 1, 0) -- Position it at the bottom of the settings menu
+ChangeColor.Text = "Close Settings"
+ChangeColor.Font = Enum.Font.Gotham
+ChangeColor.TextSize = 14
+ChangeColor.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+ChangeColor.TextColor3 = Color3.fromRGB(255, 255, 255)
+ChangeColor.Parent = settingsFrame
+
+-- Function to close the settings frame
+local function closeSettingsMenu()
+  
+end
+
+-- Connect the close button to the close function
+ChangeColor.MouseButton1Click:Connect(closeSettingsMenu)
+
+
+-- Close Settings Button
+local closeSettingsButton = Instance.new("TextButton")
+closeSettingsButton.Size = UDim2.new(1, 0, 0.2, 0)
+closeSettingsButton.Position = UDim2.new(0, 0, 1, 0) -- Position it at the bottom of the settings menu
+closeSettingsButton.Text = "Close Settings"
+closeSettingsButton.Font = Enum.Font.Gotham
+closeSettingsButton.TextSize = 14
+closeSettingsButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+closeSettingsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeSettingsButton.Parent = settingsFrame
+
+-- Function to close the settings frame
+local function closeSettingsMenu()
+    settingsFrame.Visible = false
+end
+
+-- Connect the close button to the close function
+closeSettingsButton.MouseButton1Click:Connect(closeSettingsMenu)
+
+local resetButton = Instance.new("TextButton")
+resetButton.Size = UDim2.new(1, 0, 0.2, 0)
+resetButton.Position = UDim2.new(0, 0, 0.8, 0)
+resetButton.Text = "Reset to Default"
+resetButton.Font = Enum.Font.Gotham
+resetButton.TextSize = 14
+resetButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+resetButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+resetButton.Parent = settingsFrame
+
+-- Reset Settings Function
+local function resetSettings()
+    menuBackgroundColor = Color3.fromRGB(10, 10, 10)
+    menuGlowColor = Color3.fromRGB(0, 255, 0)
+    menuTransparency = 0
+    -- Reset font size, transparency, etc.
+end
+
+resetButton.MouseButton1Click:Connect(resetSettings)
+
+-- Settings Toggle Function
+local function toggleSettingsMenu()
+    settingsFrame.Visible = not settingsFrame.Visible
+end
+
+-- Script List
+local scripts = {
+    {name = "ESP Script", execute = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EclipseYT212/weee/refs/heads/main/esp"))() end},
+    {name = "Aimbot", execute = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EclipseYT212/EXPLOSIVE/refs/heads/main/AIMBOT"))() end},
+    {name = "Speed Hack", execute = function() loadstring(game:HttpGet("https://pastebin.com/raw/SPEED_HACK_SCRIPT"))() end},
+    {name = "God Mode", execute = function() loadstring(game:HttpGet("https://pastebin.com/raw/GOD_MODE_SCRIPT"))() end},
+    {name = "PlayerList", execute = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EclipseYT212/EXPLOSIVE/refs/heads/main/playerlist"))() end},
+    {name = "Radar", execute = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EclipseYT212/EXPLOSIVE/refs/heads/main/Radar"))() end},
+    {name = "Console", execute = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EclipseYT212/EXPLOSIVE/refs/heads/main/console"))() end},
+    {name = "⚙ Settings", execute = toggleSettingsMenu}
+
+}
+
+local optionsContainer = Instance.new("Frame")
+optionsContainer.Size = UDim2.new(1, 0, 0.8, 0)
+optionsContainer.Position = UDim2.new(0, 0, 0.2, 0)
+optionsContainer.BackgroundTransparency = 1
+optionsContainer.Parent = frame
+
+local buttons = {}
+for i, script in ipairs(scripts) do
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, 0, 0.2, 0)
+    button.Position = UDim2.new(0, 0, (i - 1) * 0.2, 0)
+    button.Text = script.name
+    button.Font = Enum.Font.GothamBold
+    button.TextSize = 16
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    button.Parent = optionsContainer
+    table.insert(buttons, button)
+end
+
+local selectedIndex = 1
+local function updateSelection()
+    for i, button in ipairs(buttons) do
+        if i == selectedIndex then
+            button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+            button.TextColor3 = Color3.fromRGB(0, 0, 0)
+        else
+            button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+            button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        end
+    end
+end
+
+-- This flag prevents navigation when Settings is open
+local isSettingsVisible = false
+
+-- Handle navigation within the settings menu
+local settingsButtons = {colorPickerButton, fontSizeSlider, transparencySlider, resetButton, closeSettingsButton}
+local settingsSelectedIndex = 1
+
+local function updateSettingsSelection()
+    for i, button in ipairs(settingsButtons) do
+        if i == settingsSelectedIndex then
+            button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+            button.TextColor3 = Color3.fromRGB(0, 0, 0)
+        else
+            button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        end
+    end
+end
+
+local function toggleGUI()
+    if frame.Visible then
+        local fadeOut = TweenService:Create(frame, TweenInfo.new(0.3), {BackgroundTransparency = 1})
+        fadeOut:Play()
+        fadeOut.Completed:Wait()
+        frame.Visible = false
+        frame.BackgroundTransparency = 0
+        settingsFrame.Visible = false -- Close settings when menu closes
+    else
+        frame.Visible = true
+        updateSelection()
+        local fadeIn = TweenService:Create(frame, TweenInfo.new(0.3), {BackgroundTransparency = menuTransparency})
+        fadeIn:Play()
+    end
+end
+
+local function executeSelectedScript()
+    local selectedScript = scripts[selectedIndex]
+    if selectedScript and selectedScript.execute then
+        selectedScript.execute()
+    end
+end
+
+-- Handle input for navigating through the settings
+local function onInputBegan(input, gameProcessed)
+    if gameProcessed then return end
+    -- Handle F1 key to toggle main menu
+    if input.KeyCode == Enum.KeyCode.F1 then
+        toggleGUI()
+    -- Handle Up and Down navigation in settings
+    elseif input.KeyCode == Enum.KeyCode.Up then
+        if settingsFrame.Visible then
+            settingsSelectedIndex = math.max(1, settingsSelectedIndex - 1)
+            updateSettingsSelection()
+        else
+            selectedIndex = math.max(1, selectedIndex - 1)
+            updateSelection()
+        end
+    elseif input.KeyCode == Enum.KeyCode.Down then
+        if settingsFrame.Visible then
+            settingsSelectedIndex = math.min(#settingsButtons, settingsSelectedIndex + 1)
+            updateSettingsSelection()
+        else
+            selectedIndex = math.min(#buttons, selectedIndex + 1)
+            updateSelection()
+        end
+    elseif input.KeyCode == Enum.KeyCode.Return then
+        if settingsFrame.Visible then
+            local selectedButton = settingsButtons[settingsSelectedIndex]
+            if selectedButton == colorPickerButton then
+                -- Implement color change functionality
+                print("Color picker clicked")
+            elseif selectedButton == fontSizeSlider then
+                -- Implement font size increase functionality
+                print("Font size increased")
+            elseif selectedButton == transparencySlider then
+                -- Implement transparency change functionality
+                print("Transparency changed")
+            elseif selectedButton == closeSettingsButton then
+                closeSettingsMenu()
+                print("SettingsClosed")
+            elseif selectedButton == resetButton then
+                resetSettings()
+                print("Settings reset")
+            end
+        else
+            executeSelectedScript()
+        end
+    -- Handle Numpad '*' to move the menu to the left
+    elseif input.KeyCode == Enum.KeyCode.KeypadMultiply then
+        frame.Position = UDim2.new(frame.Position.X.Scale - 0.05, frame.Position.X.Offset, frame.Position.Y.Scale, frame.Position.Y.Offset)
+    -- Handle Numpad '-' to move the menu to the right
+    elseif input.KeyCode == Enum.KeyCode.KeypadMinus then
+        frame.Position = UDim2.new(frame.Position.X.Scale + 0.05, frame.Position.X.Offset, frame.Position.Y.Scale, frame.Position.Y.Offset)
+    end
+end
+
+-- Notification frame
+local notificationFrame = Instance.new("Frame")
+notificationFrame.Size = UDim2.new(0, 300, 0, 50)
+notificationFrame.Position = UDim2.new(0.5, -150, 0.1, 0)
+notificationFrame.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+notificationFrame.Visible = false
+notificationFrame.Parent = gui
+
+local notificationText = Instance.new("TextLabel")
+notificationText.Size = UDim2.new(1, 0, 1, 0)
+notificationText.Text = "Script Loaded"
+notificationText.Font = Enum.Font.GothamBold
+notificationText.TextSize = 18
+notificationText.TextColor3 = Color3.fromRGB(255, 255, 255)
+notificationText.BackgroundTransparency = 1
+notificationText.Parent = notificationFrame
+
+-- Settings Controls
+local colorPickerButton = Instance.new("TextButton")
+colorPickerButton.Size = UDim2.new(1, 0, 0.2, 0)
+colorPickerButton.Position = UDim2.new(0, 0, 0.2, 0)
+colorPickerButton.Text = "Change UI Color"
+colorPickerButton.Font = Enum.Font.Gotham
+colorPickerButton.TextSize = 14
+colorPickerButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+colorPickerButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+colorPickerButton.Parent = settingsFrame
+
+-- Color Picker Frame (Initially Hidden)
+local colorPickerFrame = Instance.new("Frame")
+colorPickerFrame.Size = UDim2.new(0, 250, 0, 150)
+colorPickerFrame.Position = UDim2.new(0.35, 0, 0.3, 0)
+colorPickerFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+colorPickerFrame.BorderSizePixel = 2
+colorPickerFrame.Visible = false
+colorPickerFrame.Parent = gui
+
+local colorPickerTitle = Instance.new("TextLabel")
+colorPickerTitle.Size = UDim2.new(1, 0, 0.2, 0)
+colorPickerTitle.Text = "Select a Color"
+colorPickerTitle.Font = Enum.Font.GothamBold
+colorPickerTitle.TextSize = 18
+colorPickerTitle.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+colorPickerTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+colorPickerTitle.Parent = colorPickerFrame
+
+-- Predefined Color Buttons
+local colorButtons = {}
+local colors = {
+    Color3.fromRGB(255, 0, 0),   -- Red
+    Color3.fromRGB(0, 255, 0),   -- Green
+    Color3.fromRGB(0, 0, 255),   -- Blue
+    Color3.fromRGB(255, 255, 0), -- Yellow
+    Color3.fromRGB(255, 165, 0), -- Orange
+    Color3.fromRGB(255, 255, 255), -- White
+    Color3.fromRGB(0, 0, 0)      -- Black
+}
+
+-- Create Color Buttons
+for i, color in ipairs(colors) do
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, 40, 0, 40)
+    button.Position = UDim2.new(0.2 * (i - 1), 0, 0.2, 0)
+    button.BackgroundColor3 = color
+    button.Text = ""
+    button.Parent = colorPickerFrame
+
+    button.MouseButton1Click:Connect(function()
+        menuBackgroundColor = colors
+        frame.BorderColor3 = menuBackgroundColor
+        colorPickerFrame.Visible = false -- Close color picker after selection
+    end)
+
+    table.insert(colorButtons, button)
+end
+-- Show notification
+local function showNotification(message)
+    notificationText.Text = message
+    notificationFrame.Visible = true
+    wait(2)
+    notificationFrame.Visible = false
+end
+
+UserInputService.InputBegan:Connect(onInputBegan)
+
+
+
+
+
+
+
+
+
+
+
+
