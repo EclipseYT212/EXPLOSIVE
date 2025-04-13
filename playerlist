@@ -158,6 +158,12 @@ local function updatePlayerList()
         end)
 
         createActionButton("Msg", buttonContainer, function()
+  local msg = messageBox.Text
+    if msg and msg ~= "" then
+        print("Sending message to " .. player.Name .. ": " .. msg)
+        -- Insert actual message-sending logic here if desired
+        messagePopup.Visible = false
+    end
             print("Message " .. player.Name) -- Replace with actual messaging function
         end)
 
