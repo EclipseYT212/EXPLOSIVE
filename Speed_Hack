@@ -1,4 +1,4 @@
-local desiredSpeed = 50  -- Change to your desired speed
+local desiredSpeed = 125  -- Change to your desired speed
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
