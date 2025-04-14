@@ -1,0 +1,11 @@
+local RS = game:GetService("RunService")
+
+RS.RenderStepped:Connect(function(deltaTime)
+    local Gun = game.Players.LocalPlayer.PlayerGui.GUI.Client.Variables.gun.Value
+
+    -- // Gunmods \\ --
+
+    if Gun ~= nil then
+       game.Players.LocalPlayer.PlayerGui.GUI.Client.Variables.ammocount.Value = 999
+    end
+end)
