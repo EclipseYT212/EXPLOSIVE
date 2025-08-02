@@ -1,0 +1,35 @@
+🔧 Changelogs – (v2.7.5)
+
+📢 MM2 Autofarm v5.7.5 Update
+A massive upgrade just dropped! Here's what's new:
+
+🧠 Major Features
+• 💨 OP Movement: Fast coin collection with floating & pathing  Full bag in 30 seconds if delayed 💀 
+• ⚡ Instant Move (Under Map TP, delayed) (soon)
+• 🧲 Smart Coin Targeting (avoids murderer)
+• 🚨 Murderer Dodge (works during move)
+• 🤖 Autofarmer Detection & Auto Hop
+• 🎒 Bag Full Detection (fixed & auto-reset)
+
+🛠️ Optimizations
+• 🧹 Lag Reduction + Cleanup
+• 🚀 FPS Checker & Temporary Throttling
+• ♻️ Memory/Module Auto-Restarts
+
+🔐 Security & Stability
+• 🔒 Anti-Kick Protection
+• 🪄 Auto-Reconnect if reset/kicked
+
+🎛️ New Modes
+• 📍 PathfindV2 (Float)
+• 🌀 OverpoweredMoveTo (temp off)
+• ⛏️ InstantUnderMapTeleport (temp off)
+• 🎯 Classic Tween
+
+🧪 Tech Additions
+• ✅ IsMurderer() Method
+• ✅ Modular movement logic
+• ✅ Smarter Server Hop
+• ✅ Coin/Beachball/Candy support
+💬 If you have any Feedback or bugs? Ping us in our discord server. Happy Farming! 🤑 
+— AutoFarm Systems Dev Team
