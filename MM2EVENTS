@@ -1,5 +1,4 @@
 {
-  "Summer2025": true,
-  "Winter2025": false,
-  "Halloween2025": false
+  "ActiveEvent": "Summer2025",
+  "CrateArgs": ["Summer2025Box", "MysteryBox", "BeachBalls2025"]
 }
