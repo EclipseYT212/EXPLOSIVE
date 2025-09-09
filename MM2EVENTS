@@ -1,4 +1,13 @@
 {
-  "ActiveEvent": "Summer2025",
-  "CrateArgs": ["Summer2025Box", "MysteryBox", "BeachBalls2025"]
+    "crates": [
+        "Summer2025Box",
+        "MysteryBox", 
+        "BeachBalls2025",
+        "HalloweenBox",
+        "ChristmasBox"
+    ],
+    "selectedCrate": "Summer2025Box",
+    "cost": 800,
+    "delay": 1.5,
+    "version": "1.0"
 }
