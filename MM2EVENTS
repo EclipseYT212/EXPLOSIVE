@@ -6,7 +6,7 @@
         "HalloweenBox",
         "ChristmasBox"
     ],
-    "selectedCrate": "Summer2025Box",
+    "selectedCrate": "Summer2025Box","MysteryBox","BeachBalls2025"
     "cost": 800,
     "delay": 1.5,
     "version": "1.0"
