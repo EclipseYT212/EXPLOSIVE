@@ -1,11 +1,7 @@
 {
-    "crates": [
-        "Summer2025Box",
-        "MysteryBox", 
-        "BeachBalls2025"
-    ],
-    "selectedCrate": "Summer2025Box",
     "crateArgs": ["Summer2025Box", "MysteryBox", "BeachBalls2025"],
+    "crates": ["Summer2025Box", "MysteryBox", "BeachBalls2025"],
+    "selectedCrate": "Summer2025Box", 
     "cost": 800,
     "delay": 1.5
 }
