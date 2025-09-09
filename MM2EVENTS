@@ -2,14 +2,10 @@
     "crates": [
         "Summer2025Box",
         "MysteryBox", 
-        "BeachBalls2025",
-        "HalloweenBox",
-        "ChristmasBox"
+        "BeachBalls2025"
     ],
     "selectedCrate": "Summer2025Box",
     "crateArgs": ["Summer2025Box"],
     "cost": 800,
-    "delay": 1.5,
-    "version": "1.0",
-    "notes": "Change crateArgs to pass different parameters to the OpenCrate remote"
+    "delay": 1.5
 }
