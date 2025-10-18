@@ -1,9 +1,8 @@
+
 {
-  "keyName": "HalloweenKey2025",
-  "currency": "Candies2025",
-  "selectedCrate": "Name",
+  "crateArgs": ["Halloween2025Box", "MysteryBox", "Candies2025"],
+  "crates": ["Halloween2025Box", "MysteryBox", "Candies2025"],
+  "selectedCrate": "Halloween2025Box",
   "cost": 800,
-  "delay": 1.5,
-  "crates": ["Name","ItemData"],
-  "crateArgs": ["Rarity","Image","Name","Godly","BoxType","Contents","Season","RarityChances"]
+  "delay": 1.5
 }
