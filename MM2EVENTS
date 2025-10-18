@@ -1,7 +1,9 @@
 {
-    "crateArgs": ["Summer2025Box", "MysteryBox", "BeachBalls2025"],
-    "crates": ["Summer2025Box", "MysteryBox", "BeachBalls2025"],
-    "selectedCrate": "Summer2025Box", 
-    "cost": 800,
-    "delay": 1.5
+  "keyName": "HalloweenKey2025",
+  "currency": "Candies2025",
+  "selectedCrate": "Name",
+  "cost": 800,
+  "delay": 1.5,
+  "crates": ["Name","ItemData"],
+  "crateArgs": ["Rarity","Image","Name","Godly","BoxType","Contents","Season","RarityChances"]
 }
