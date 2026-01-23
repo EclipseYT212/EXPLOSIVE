@@ -1,8 +1,8 @@
 
 {
-  "crateArgs": ["Halloween2025Box", "MysteryBox", "Candies2025"],
-  "crates": ["Halloween2025Box", "MysteryBox", "Candies2025"],
-  "selectedCrate": "Halloween2025Box",
-  "cost": 800,
+  "crateArgs": ["MLG BOX", "MysteryBox", "Coins"],
+  "crates": ["MLG BOX", "MysteryBox", "Coins"],
+  "selectedCrate": "MLG BOX",
+  "cost": 1000,
   "delay": 1.5
 }
